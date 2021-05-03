@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/marky_podcast_app_in_alexa",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "User",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}
