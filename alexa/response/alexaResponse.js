@@ -71,6 +71,17 @@ module.exports.getAplListResponse = function (text) {
                     "document": {
                         "type": "APL",
                         "version": "1.6",
+                        "extensions": [
+                            {
+                                "name": "Back",
+                                "uri": "aplext:backstack:10"
+                            }
+                        ],
+                        "settings": {
+                            "Back": {
+                                "backstackId": "episodesList"
+                            }
+                        },
                         "theme": "dark",
                         "import": [
                             {
@@ -90,8 +101,8 @@ module.exports.getAplListResponse = function (text) {
                                     "headerAttributionImage": "${payload.textListData.logoUrl}",
                                     "backgroundImageSource": "${payload.textListData.backgroundImage.sources[0].url}",
                                     "listItems": "${payload.textListData.listItems}",
-                                    "touchForward": false,
-                                    "id": "plantList"
+                                    "touchForward": true,
+                                    "id": "videoList"
                                 }
                             ]
                         }
@@ -392,6 +403,12 @@ module.exports.getAplCardResponse = function (text, videoDetails) {
                     "document": {
                         "type": "APL",
                         "version": "1.6",
+                        "extensions": [
+                            {
+                                "name": "Back",
+                                "uri": "aplext:backstack:10"
+                            }
+                        ],
                         "import": [
                             {
                                 "name": "alexa-layouts",
@@ -405,7 +422,7 @@ module.exports.getAplCardResponse = function (text, videoDetails) {
                             "items": [
                                 {
                                     "type": "AlexaDetail",
-                                    "id": "plantDetail",
+                                    "id": "videoDetails",
                                     "detailType": "location",
                                     "detailImageAlignment": "right",
                                     "headerTitle": "${payload.detailImageRightData.title}",
@@ -485,6 +502,27 @@ module.exports.getAplCardResponse = function (text, videoDetails) {
                 }
             ],
             "shouldEndSession": false
+        }
+    }
+}
+
+module.exports.getGoBackAplCommand = function (token, backValue) {
+    return {
+        "version": "1.0",
+        "response": {
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.ExecuteCommands",
+                    "token": token,
+                    "commands": [
+                        {
+                            "type": "Back:GoBack",
+                            "backType": "id",
+                            "backValue": backValue
+                        }
+                    ]
+                }
+            ]
         }
     }
 }
