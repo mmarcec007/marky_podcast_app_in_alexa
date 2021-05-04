@@ -31,7 +31,7 @@ router.post('/', function(req, res, next) {
         }
     } else if (requestType === 'Alexa.Presentation.APL.UserEvent') {
         const arguments = request.arguments;
-        console.log("Printing argumentF: " + arguments[0]);
+        console.log("Printing argument: " + JSON.stringify(arguments[0], null, 4));
         const argumentType = arguments[0].type !== undefined ? arguments[0].type : null;
         const url = arguments[0].url !== undefined ? arguments[0].url : null;
         if (argumentType === 'details') {
@@ -39,7 +39,10 @@ router.post('/', function(req, res, next) {
         } else if (argumentType === 'video') {
             response = alexaResponse.getVideoResponse(url, '', '');
         } else if (arguments[0] === 'goBack') {
-            response =  alexaResponse.getAplListResponse('')
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'detailsToken') {
+                response =  alexaResponse.getGoBackAplCommand(context["Alexa.Presentation.APL"].token, 'episodesList');
+            }
         }
     }
     console.log(JSON.stringify(response, null, 4));
