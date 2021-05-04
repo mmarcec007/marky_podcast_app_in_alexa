@@ -28,6 +28,11 @@ router.post('/', function(req, res, next) {
             }
         } else if (intentName === 'OpenVideoPlayer') {
             response = alexaResponse.getAplVideoPlayer();
+        } else if (intentName === 'GoBack') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'detailsToken' || tokenName === 'someForm') {
+                response =  alexaResponse.getGoBackAplCommand(context["Alexa.Presentation.APL"].token, 'episodesList');
+            }
         }
     } else if (requestType === 'Alexa.Presentation.APL.UserEvent') {
         const arguments = request.arguments;
@@ -40,7 +45,7 @@ router.post('/', function(req, res, next) {
             response = alexaResponse.getVideoResponse(url, '', '');
         } else if (arguments[0] === 'goBack') {
             const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
-            if (tokenName === 'detailsToken') {
+            if (tokenName === 'detailsToken' || tokenName === 'someForm') {
                 response =  alexaResponse.getGoBackAplCommand(context["Alexa.Presentation.APL"].token, 'episodesList');
             }
         }
