@@ -28,6 +28,8 @@ router.post('/', function(req, res, next) {
             }
         } else if (intentName === 'OpenVideoPlayer') {
             response = alexaResponse.getAplVideoPlayer();
+        } else if (intentName === 'OpenForm') {
+            response = alexaResponse.getAplForm();
         } else if (intentName === 'GoBack') {
             const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
             if (tokenName === 'detailsToken' || tokenName === 'someForm') {
@@ -43,6 +45,10 @@ router.post('/', function(req, res, next) {
             response = alexaResponse.getAplCardResponse('Details about ' + arguments[0].title, arguments[0]);
         } else if (argumentType === 'video') {
             response = alexaResponse.getVideoResponse(url, '', '');
+        } else if (argumentType === 'submitForm') {
+            const age = arguments[0].age !== undefined ? arguments[0].age : null;
+            const consent = arguments[0].consent !== undefined ? arguments[0].consent : null;
+            response = alexaResponse.getSetValueAplCommand(context["Alexa.Presentation.APL"].token, {age: age, consent: consent});
         } else if (arguments[0] === 'goBack') {
             const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
             if (tokenName === 'detailsToken' || tokenName === 'someForm') {
