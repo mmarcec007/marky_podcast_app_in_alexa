@@ -506,6 +506,196 @@ module.exports.getAplCardResponse = function (text, videoDetails) {
     }
 }
 
+module.exports.getAplForm = function () {
+    return {
+        "version": "1.0",
+        "response": {
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.RenderDocument",
+                    "token": "someForm",
+                    "document": {
+                        "type": "APL",
+                        "version": "1.4",
+                        "extensions": [
+                            {
+                                "name": "Back",
+                                "uri": "aplext:backstack:10"
+                            }
+                        ],
+                        "background": "#1f2227",
+                        "settings": {},
+                        "theme": "dark",
+                        "import": [
+                            {
+                                "name": "alexa-styles",
+                                "version": "1.1.0"
+                            },
+                            {
+                                "name": "alexa-layouts",
+                                "version": "1.2.0"
+                            }
+                        ],
+                        "resources": [],
+                        "styles": {
+                            "EditStyle": {
+                                "values": [
+                                    {
+                                        "borderWidth": 10,
+                                        "borderStrokeWidth": 10,
+                                        "borderColor": "darkgrey",
+                                        "hintColor": "#00b0e6",
+                                        "hintWeight": "600",
+                                        "color": "#00b0e6",
+                                        "fontSize": "70dp",
+                                        "size": 50
+                                    }
+                                ]
+                            }
+                        },
+                        "onMount": [],
+                        "graphics": {},
+                        "commands": {},
+                        "layouts": {},
+                        "mainTemplate": {
+                            "parameters": [
+                                "payload"
+                            ],
+                            "items": [
+                                {
+                                    "type": "Container",
+                                    "height": "100%",
+                                    "width": "100%",
+                                    "paddingTop": "40vh",
+                                    "alignItems": "center",
+                                    "bind": [
+                                        {
+                                            "name": "TextToSubmit",
+                                            "value": "0",
+                                            "type": "number"
+                                        },
+                                        {
+                                            "name": "ConsentToSubmit",
+                                            "value": false,
+                                            "type": "boolean"
+                                        }
+                                    ],
+                                    "items": [
+                                        {
+                                            "type": "EditText",
+                                            "id": "box",
+                                            "width": "39vw",
+                                            "height": "15vh",
+                                            "style": "EditStyle",
+                                            "onTextChange": [
+                                                {
+                                                    "type": "SetValue",
+                                                    "when": "${String.length(event.source.text) == 1 }",
+                                                    "componentId": "resultId",
+                                                    "property": "text",
+                                                    "value": "you are too young to see this move"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "when": "${String.length(event.source.text) == 2 && event.source.text < '18'}",
+                                                    "componentId": "resultId",
+                                                    "property": "text",
+                                                    "value": "you are too young to see this move"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "when": "${String.length(event.source.text) == 2 && event.source.text >= '18'}",
+                                                    "componentId": "resultId",
+                                                    "property": "text",
+                                                    "value": "you are old enough to see this movie"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "componentId": "box",
+                                                    "property": "borderColor",
+                                                    "value": "red"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "when": "${String.length(event.source.text) == 2 && event.source.text >= '18'}",
+                                                    "componentId": "box",
+                                                    "property": "borderColor",
+                                                    "value": "green"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "when": "${String.length(event.source.text) == 2 && event.source.text >= '18'}",
+                                                    "property": "TextToSubmit",
+                                                    "value": "${event.source.text}"
+                                                }
+                                            ],
+                                            "maxLength": 2,
+                                            "hint": "Enter your age",
+                                            "validCharacters": "-0-9"
+                                        },
+                                        {
+                                            "type": "Text",
+                                            "id": "someTextId",
+                                            "text": "Some Text",
+                                            "textAlignVertical": "left",
+                                            "width": "75%"
+                                        },
+                                        {
+                                            "type": "AlexaRadioButton",
+                                            "id": "${radioButtonId}",
+                                            "radioButtonHeight": "${radioButtonHeight}",
+                                            "radioButtonWidth": "${radioButtonWidth}",
+                                            "radioButtonColor": "${radioButtonColor}",
+                                            "checked": "${checked}",
+                                            "disabled": "${disabled}",
+                                            "primaryAction": [
+                                                {
+                                                    "type": "SetValue",
+                                                    "componentId": "someTextId",
+                                                    "property": "text",
+                                                    "value": "${event.source.checked}"
+                                                },
+                                                {
+                                                    "type": "SetValue",
+                                                    "property": "ConsentToSubmit",
+                                                    "value": "${event.source.checked}"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "Text",
+                                            "id": "resultId",
+                                            "paddingTop": "5vh",
+                                            "text": "Enter your age to check if you may see this movie ..."
+                                        },
+                                        {
+                                            "type": "AlexaButton",
+                                            "buttonText": "Submit",
+                                            "id": "idForThisButton",
+                                            "primaryAction": {
+                                                "type": "SendEvent",
+                                                "arguments": [
+                                                    {
+                                                        "type": "submitForm",
+                                                        "age": "${TextToSubmit}",
+                                                        "consent": "${ConsentToSubmit}"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    "datasources": {},
+                    "sources": {}
+                }
+            ]
+        }
+    };
+}
+
 module.exports.getGoBackAplCommand = function (token, backValue) {
     return {
         "version": "1.0",
