@@ -287,6 +287,12 @@ module.exports.getAplVideoPlayer = function () {
                                             "type": "AlexaBackground"
                                         },
                                         {
+                                            "type": "Text",
+                                            "id": "catFactText",
+                                            "text": "Not all cats like catnip.",
+                                            "speech": "<speak>Not all cats like <emphasis level='strong'>catnip</emphasis>.</speak>"
+                                        },
+                                        {
                                             "type": "Video",
                                             "height": "100%",
                                             "width": "70vw",
@@ -296,12 +302,12 @@ module.exports.getAplVideoPlayer = function () {
                                             "audioTrack": "foreground",
                                             "id": "videoPlayerId",
                                             "source": [
-                                                "https://cnetvideo.cbsistatic.com/vr/2021/04/28/1891086403585/netpicks_May21_1_649731_5130.mp4",
+                                                "https://cnetvideo.cbsistatic.com/vr/2021/04/28/1891086403585/netpicks_May21_1_649731_5130.mp4"/*,
                                                 "https://cnetvideo.cbsistatic.com/vr/2021/04/28/1890933315654/Unpacked_April_649720_5130.mp4",
                                                 "https://cnetvideo.cbsistatic.com/vr/2021/04/28/1890910787933/GalaxyBookOdyssey_649718_5130.mp4",
                                                 "https://cnetvideo.cbsistatic.com/vr/2021/04/27/1890478147712/TechToday_280421_SB_649706_5130.mp4",
                                                 "https://cnetvideo.cbsistatic.com/vr/2021/04/27/1890245187959/Carfection_CupraFormentor_Final_HD__649692_5130.mp4",
-                                                "https://cnetvideo.cbsistatic.com/vr/2021/04/27/1890046531998/TT_04_27_2021_649685_5130.mp4"
+                                                "https://cnetvideo.cbsistatic.com/vr/2021/04/27/1890046531998/TT_04_27_2021_649685_5130.mp4"*/
                                             ],
                                             "onPlay": [
                                                 {
@@ -315,6 +321,15 @@ module.exports.getAplVideoPlayer = function () {
                                                     "type": "SetValue",
                                                     "property": "videoTotalValue",
                                                     "value": "${event.duration}"
+                                                },
+                                                {
+                                                    "type": "SendEvent",
+                                                    "arguments": [
+                                                        {
+                                                            "type": "videoInfo",
+                                                            "duration": "${event.duration}"
+                                                        }
+                                                    ]
                                                 }
                                             ],
                                             "onTimeUpdate": [
@@ -333,6 +348,17 @@ module.exports.getAplVideoPlayer = function () {
                                                     "type": "SetValue",
                                                     "property": "videoTotalValue",
                                                     "value": "${event.duration}"
+                                                }
+                                            ],
+                                            "onEnd": [
+                                                {
+                                                    "type": "SendEvent",
+                                                    "arguments": [
+                                                        {
+                                                            "type": "videosFinishedPlaying",
+                                                            "duration": "${event.duration}"
+                                                        }
+                                                    ]
                                                 }
                                             ]
                                         },
