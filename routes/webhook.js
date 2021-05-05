@@ -35,6 +35,54 @@ router.post('/', function(req, res, next) {
             if (tokenName === 'detailsToken' || tokenName === 'someForm') {
                 response =  alexaResponse.getGoBackAplCommand(context["Alexa.Presentation.APL"].token, 'episodesList');
             }
+        } else if (intentName === 'PlayLast') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken') {
+                response =  alexaResponse.getUpdateSourceAndMediaControlAplCommand(
+                    context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId'
+                );
+            }
+        } else if (intentName === 'Play' ||intentName === 'AMAZON.ResumeIntent') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken') {
+                response =  alexaResponse.getMediaControlAplCommand(context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId',
+                    'play'
+                );
+            }
+        } else if (intentName === 'AMAZON.PauseIntent') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken') {
+                response =  alexaResponse.getMediaControlAplCommand(context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId',
+                    'pause'
+                );
+            }
+        } else if (intentName === 'AMAZON.NextIntent') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken') {
+                response =  alexaResponse.getMediaControlAplCommand(context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId',
+                    'next'
+                );
+            }
+        } else if (intentName === 'AMAZON.PreviousIntent') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken' ) {
+                response =  alexaResponse.getMediaControlAplCommand(context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId',
+                    'previous'
+                );
+            }
+        } else if (intentName === 'AMAZON.StartOverIntent') {
+            const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
+            if (tokenName === 'videoPlayerToken') {
+                response =  alexaResponse.getMediaControlAplCommand(context["Alexa.Presentation.APL"].token,
+                    'videoPlayerId',
+                    'rewind'
+                );
+            }
         }
     } else if (requestType === 'Alexa.Presentation.APL.UserEvent') {
         const arguments = request.arguments;
@@ -49,6 +97,12 @@ router.post('/', function(req, res, next) {
             const age = arguments[0].age !== undefined ? arguments[0].age : null;
             const consent = arguments[0].consent !== undefined ? arguments[0].consent : null;
             response = alexaResponse.getSetValueAplCommand(context["Alexa.Presentation.APL"].token, {age: age, consent: consent});
+        } else if (argumentType === 'videoInfo') {
+            // classic alexa speech response
+            response = alexaResponse.getTextResponse('Going to play next video.');
+        } else if (argumentType === 'videosFinishedPlaying') {
+            // classic alexa speech response
+            response = alexaResponse.getTextResponse('What would you like to do next?');
         } else if (arguments[0] === 'goBack') {
             const tokenName = context["Alexa.Presentation.APL"].token.split(";")[0];
             if (tokenName === 'detailsToken' || tokenName === 'someForm') {
