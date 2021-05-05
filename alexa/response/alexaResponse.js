@@ -766,3 +766,76 @@ module.exports.getSetValueAplCommand = function (token, value) {
         }
     }
 }
+
+module.exports.getSpeakItemAplCommand = function (token) {
+    return {
+        "version": "1.0",
+        "response": {
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.ExecuteCommands",
+                    "token": token,
+                    "commands": [
+                        {
+                            "type": "SpeakItem",
+                            "componentId": "catFactText",
+                            "highlightMode": "line",
+                            "align": "center"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+// APL media commands
+
+module.exports.getMediaControlAplCommand = function (token, componentId, mediaControlCommand) {
+    return {
+        "version": "1.0",
+        "response": {
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.ExecuteCommands",
+                    "token": token,
+                    "commands": [
+                        {
+                            "type": "ControlMedia",
+                            "componentId": componentId,
+                            "command": mediaControlCommand
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+
+module.exports.getUpdateSourceAndMediaControlAplCommand = function (token, componentId, mediaControlCommand = 'play') {
+    return {
+        "version": "1.0",
+        "response": {
+            "directives": [
+                {
+                    "type": "Alexa.Presentation.APL.ExecuteCommands",
+                    "token": token,
+                    "commands": [
+                        {
+                            "type": "SetValue",
+                            "componentId": componentId,
+                            "property": 'source',
+                            "value": 'https://cnetvideo.cbsistatic.com/vr/2021/04/27/1890046531998/TT_04_27_2021_649685_5130.mp4'
+                        },
+                        {
+                            "type": "ControlMedia",
+                            "componentId": componentId,
+                            "command": mediaControlCommand
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
